@@ -3,16 +3,14 @@ int HEIGHT = 800;
 
 // Interface with Figure's definitions.
 interface Figure {
-    float positionX = 0.0;
-    float positionY = 0.0;
 
     public void draw();
     
     public void move(int x, int y);
 
-    public void verify_collision();
+    public void verifyCollision();
 
-    public void verify_world_collision();
+    public void verifyWorldCollision();
 }
 
 // Interface with physical's laws rules
@@ -21,7 +19,7 @@ interface PhysicalBody {
     // 10 m/s²              |
     // no caso 10 pixels/s² |
     // // // // // // // // / 
-    float GRAVITY = 10.0;
+    static final float GRAVITY = 10.0;
 
     float bodyAcceleration = 0.0;
     float bodyVelocity = 0.0;
@@ -33,35 +31,57 @@ interface PhysicalBody {
 
 class Ball implements Figure, PhysicalBody {
 
+    // default position axis
+    float x = 0.0;
+    float y = 0.0;
+
+    // 1 Radian
+    float RAD = 0.01745;
+    
+    int radius = 0;
 
     public Ball(int radius, int x, int y){
-
+        this.radius = radius;
+        this.x = x;
+        this.y = y;
     }
 
     public Ball(int radius){
         // create de body in the origin of the graph;
-        Ball(radius, 0, 0); 
+        this(radius, 0, 0); 
     }
 
     @Override
-    public void draw(){}
-
-    public void move(int x, int y){
-
+    public void draw(){
+        beginShape();
+        for(int i=0; i< 360; i++){
+            float o = i*RAD;
+            x = cos(o) * this.radius;
+            y = sin(o) * this.radius;
+            vertex(x, y);
+        }
+        endShape(CLOSE);
     }
 
-    public void verify_collision(){
+    public void move(int x, int y){}
 
-    }
+    public void verifyCollision(){}
 
-    public void verify_world_collision(){
-    }
+    public void verifyWorldCollision(){}
 
     public void computeNewtonForce(){}
 }
 
-void setup(){
+void settings(){
+    size(WIDTH, HEIGHT);
+}
+
+Ball ball = new Ball(10);
+
+void setup() {
 }
 
 void draw(){
+    translate(WIDTH/2, HEIGHT/2);
+    ball.draw();
 }
