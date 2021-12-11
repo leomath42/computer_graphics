@@ -27,6 +27,10 @@ interface PhysicalBody {
 
     public void computeNewtonForce();
 
+    public void computeVelocity();
+
+    public void computeBodyPosition();
+
 }
 
 class Ball implements Figure, PhysicalBody {
@@ -53,6 +57,11 @@ class Ball implements Figure, PhysicalBody {
 
     @Override
     public void draw(){
+
+        drawFigure();
+    }
+
+    public void drawFigure(){
         beginShape();
         for(int i=0; i< 360; i++){
             float o = i*RAD;
@@ -63,7 +72,12 @@ class Ball implements Figure, PhysicalBody {
         endShape(CLOSE);
     }
 
-    public void move(int x, int y){}
+    public void move(int x, int y){
+        push();
+        translate(x, y);
+        drawFigure();
+        pop();
+    }
 
     public void verifyCollision(){}
 
@@ -79,9 +93,13 @@ void settings(){
 Ball ball = new Ball(10);
 
 void setup() {
+    // translate(WIDTH/2, HEIGHT/2);
+    // ball.draw();
+    // ball.move(0, 5);
 }
 
 void draw(){
     translate(WIDTH/2, HEIGHT/2);
     ball.draw();
+    // ball.move(0, frameCount);
 }
