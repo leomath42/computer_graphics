@@ -2,6 +2,7 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from OpenGL.GL import *
 import math
+import random
 
 
 class Paraboloide():
@@ -43,67 +44,45 @@ class Paraboloide():
         glEnd()
         glPopMatrix()
 
-# def z_axis(x, y, a, b, c):
-#     z = c * ((x/a)**2 + (y/b)**2)
 
-
-# def paraboloide():
-#     x = r * sin(rad)
-#     y = r * cos(rad)
-#     z = z_axis(x, y, 1, 1, 1)
-
-p = Paraboloide(1, 1, 0, 1)
-# p0 = Paraboloide(1, 1, 2, 1)
-# p1 = Paraboloide(1, 1, 1, 1)
-# p2 = Paraboloide(2, 2, 2, 1)
-# p3 = Paraboloide(3, 3, 3, 1)
-
-
-# aux = [p]
-
-# for i in range(1, 10):
-#     for j in range(1, 10):
-#         p_aux = Paraboloide(i, j, 1, 1)
-#         aux.append(p_aux)
-# aux = []
-# P = 4
 CHUNKS = 10
 vertices = []
-for z in range(CHUNKS):
-    z = z/CHUNKS
-    y = z**2
-    vertices.append((0, y, z))
+rad_dx = math.pi/180
+raio = 1
+# for z in range(CHUNKS):
+#     z = z/CHUNKS
+#     y = z**2
+#     vertices.append((0, y, z))
 
-# vertices = (
-#     (0, 0.0, 0.0),
-#     (0, 0.010000000000000002, 0.1),
-#     (0, 0.04000000000000001, 0.2),
-#     (0, 0.09, 0.3),
-#     (0, 0.16000000000000003, 0.4),
-#     (0, 0.25, 0.5),
-#     (0, 0.36, 0.6),
-#     (0, 0.48999999999999994, 0.7),
-#     (0, 0.6400000000000001, 0.8),
-#     (0, 0.81, 0.9),
-# )
+
+for i in range(360):
+
+    for j in range(CHUNKS):
+        z = j/CHUNKS * math.sin(rad_dx*i)
+        x = j/CHUNKS * math.cos(rad_dx*i)
+        y = j/CHUNKS
+        vertices.append((x, y**2, z))
+
+cores = (
+    (0, 1, 0),
+    (1, 0, 0),
+    (0, 0, 1),
+    (1, 1, 0),
+    (0.5, 0.5, 0.5),
+)
 
 
 def draw():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    # p.draw()
-    # p1.draw()
-    # p2.draw()
-    # p3.draw()
 
-    # for i in aux:
-    #     i.draw()
     glBegin(GL_LINES)
     for i in range(1, len(vertices)):
+        glColor3fv(cores[i % 5])
         glVertex3fv(vertices[i-1])
         glVertex3fv(vertices[i])
 
     glEnd()
-    glRotate(1, 0, 1, 0)
+    glRotate(1, 1, 1, 0)
     glutSwapBuffers()
 
 
@@ -119,9 +98,6 @@ def main():
     glutInitWindowSize(800, 600)
     glutCreateWindow("Sólidos de Revolução.")
     glutDisplayFunc(draw)
-    # glutMotionFunc(mouseMove)
-    # glutPassiveMotionFunc(mouseMove)
-    # glutMouseFunc(mouse)
     glEnable(GL_MULTISAMPLE)
     glEnable(GL_DEPTH_TEST)
     glClearColor(0.0, 0.0, 0.0, 1.0)
